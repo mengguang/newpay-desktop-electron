@@ -1,0 +1,62 @@
+diff --git a/node_modules/@ethersproject/signing-key/lib.esm/index.js b/node_modules/@ethersproject/signing-key/lib.esm/index.js
+index e3f4a07..7bdc095 100644
+--- a/node_modules/@ethersproject/signing-key/lib.esm/index.js
++++ b/node_modules/@ethersproject/signing-key/lib.esm/index.js
+@@ -8,13 +8,13 @@ const logger = new Logger(version);
+ let _curve = null;
+ function getCurve() {
+     if (!_curve) {
+-        _curve = new EC("secp256k1");
++        _curve = new EC("p256");
+     }
+     return _curve;
+ }
+ export class SigningKey {
+     constructor(privateKey) {
+-        defineReadOnly(this, "curve", "secp256k1");
++        defineReadOnly(this, "curve", "p256");
+         defineReadOnly(this, "privateKey", hexlify(privateKey));
+         const keyPair = getCurve().keyFromPrivate(arrayify(this.privateKey));
+         defineReadOnly(this, "publicKey", "0x" + keyPair.getPublic(false, "hex"));
+diff --git a/node_modules/@ethersproject/signing-key/lib/index.js b/node_modules/@ethersproject/signing-key/lib/index.js
+index 4f09a9d..6938fee 100644
+--- a/node_modules/@ethersproject/signing-key/lib/index.js
++++ b/node_modules/@ethersproject/signing-key/lib/index.js
+@@ -9,13 +9,13 @@ var logger = new logger_1.Logger(_version_1.version);
+ var _curve = null;
+ function getCurve() {
+     if (!_curve) {
+-        _curve = new elliptic_1.EC("secp256k1");
++        _curve = new elliptic_1.EC("p256");
+     }
+     return _curve;
+ }
+ var SigningKey = /** @class */ (function () {
+     function SigningKey(privateKey) {
+-        properties_1.defineReadOnly(this, "curve", "secp256k1");
++        properties_1.defineReadOnly(this, "curve", "p256");
+         properties_1.defineReadOnly(this, "privateKey", bytes_1.hexlify(privateKey));
+         var keyPair = getCurve().keyFromPrivate(bytes_1.arrayify(this.privateKey));
+         properties_1.defineReadOnly(this, "publicKey", "0x" + keyPair.getPublic(false, "hex"));
+diff --git a/node_modules/@ethersproject/signing-key/src.ts/index.ts b/node_modules/@ethersproject/signing-key/src.ts/index.ts
+index 737a40e..7b01aa1 100644
+--- a/node_modules/@ethersproject/signing-key/src.ts/index.ts
++++ b/node_modules/@ethersproject/signing-key/src.ts/index.ts
+@@ -12,7 +12,7 @@ const logger = new Logger(version);
+ let _curve: EC = null
+ function getCurve() {
+     if (!_curve) {
+-        _curve = new EC("secp256k1");
++        _curve = new EC("p256");
+     }
+     return _curve;
+ }
+@@ -30,7 +30,7 @@ export class SigningKey {
+     readonly _isSigningKey: boolean;
+ 
+     constructor(privateKey: BytesLike) {
+-        defineReadOnly(this, "curve", "secp256k1");
++        defineReadOnly(this, "curve", "p256");
+ 
+         defineReadOnly(this, "privateKey", hexlify(privateKey));
+ 
