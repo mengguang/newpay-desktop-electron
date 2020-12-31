@@ -22,18 +22,20 @@ function KeystoreGenerator () {
   const history = useHistory();
   const classes = useStyles();
   
-  useEffect(() => {
-    ipcRenderer.removeAllListeners('keystore:save')
-    ipcRenderer.on('keystore:save', (event, result) => {
-      console.log(result);
-    });
-  }, []);
+  // useEffect(() => {
+  //   ipcRenderer.removeAllListeners('keystore:save')
+  //   ipcRenderer.on('keystore:save', (event, result) => {
+  //     console.log(result);
+  //   });
+  // }, []);
 
-  async function onSubmit (event) {
+  function onSubmit (event) {
     event.preventDefault();
     if (password1 === password2 && password1.length >= 6) {
       console.log(password1);
-      ipcRenderer.send('keystore:save', password1);
+      ipcRenderer.invoke('keystore:save', password1).then( message => {
+        console.log(message)
+      })
     }
   }
 

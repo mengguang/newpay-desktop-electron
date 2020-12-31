@@ -137,7 +137,7 @@ app.on('activate', () => {
   if (mainWindow === null) createWindow();
 });
 
-ipcMain.on('keystore:save', async (event, password) => {
+ipcMain.handle('keystore:save', async (_event, password) => {
   console.log(password);
 
   const wallet = ethers.Wallet.createRandom();
@@ -150,9 +150,9 @@ ipcMain.on('keystore:save', async (event, password) => {
   console.log(keystoreFile);
   if(keystoreFile.canceled === false && keystoreFile.filePath !== undefined) {
     fs.writeFileSync(keystoreFile.filePath,keystore);
-    event.reply('keystore:save', 'SUCCESS');
+    return 'SUCCESS'
   } else {
-    event.reply('keystore:save', 'FAIL');
+    return 'FAIL';
   }
   
 });
