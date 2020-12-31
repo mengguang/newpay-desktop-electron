@@ -11,13 +11,16 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 
+import { ethers } from 'ethers';
+import fs from 'fs';
+
 export default class AppUpdater {
-  constructor() {
+  constructor () {
     log.transports.file.level = 'info';
     autoUpdater.logger = log;
     autoUpdater.checkForUpdatesAndNotify();
@@ -45,7 +48,7 @@ const installExtensions = async () => {
 
   return installer
     .default(
-      extensions.map((name) => installer[name]),
+      extensions.map(name => installer[name]),
       forceDownload
     )
     .catch(console.log);
@@ -73,8 +76,8 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      nodeIntegration: true,
-    },
+      nodeIntegration: true
+    }
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
@@ -123,10 +126,33 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.whenReady().then(createWindow).catch(console.log);
+app
+  .whenReady()
+  .then(createWindow)
+  .catch(console.log);
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
+});
+
+ipcMain.on('keystore:save', async (event, password) => {
+  console.log(password);
+
+  const wallet = ethers.Wallet.createRandom();
+  const keystore = await wallet.encrypt(password);
+
+  const keystoreFile = await dialog.showSaveDialog({
+    title: 'save keystore file as...',
+    defaultPath: `${wallet.address}.json`
+  });
+  console.log(keystoreFile);
+  if(keystoreFile.canceled === false && keystoreFile.filePath !== undefined) {
+    fs.writeFileSync(keystoreFile.filePath,keystore);
+    event.reply('keystore:save', 'SUCCESS');
+  } else {
+    event.reply('keystore:save', 'FAIL');
+  }
+  
 });
