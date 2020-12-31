@@ -1,69 +1,62 @@
-import React from 'react';
-
-import { Link } from 'react-router';
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router';
 import { Router } from 'react-router-dom';
-
 import { ipcRenderer } from 'electron';
 
-class KeystoreGenerator extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = { password1: '', password2: '' };
+function KeystoreGenerator () {
+  const [password1, setPassword1] = useState('');
+  const [password2, setPassword2] = useState('');
+  const history = useHistory();
+  useEffect(() => {
+    console.log('useEffect');
     ipcRenderer.on('keystore:save', (event, result) => {
       console.log(result);
     });
-  }
+  }, []);
 
-  onSubmit = async event => {
+  async function onSubmit (event) {
     event.preventDefault();
-    if (
-      this.state.password1 === this.state.password2 &&
-      this.state.password1.length >= 6
-    ) {
-      console.log(this.state.password1);
-      ipcRenderer.send('keystore:save', this.state.password1);
+    if (password1 === password2 && password1.length >= 6) {
+      console.log(password1);
+      ipcRenderer.send('keystore:save', password1);
     }
-  };
-
-  onPassword1Change = event => {
-    this.setState({ password1: event.target.value });
-  };
-  onPassword2Change = event => {
-    this.setState({ password2: event.target.value });
-  };
-
-  render () {
-    return (
-      <div>
-        <form onSubmit={this.onSubmit}>
-          <div>
-            <label>Password: </label>{' '}
-            <input
-              type='password'
-              name='password1'
-              onChange={this.onPassword1Change}
-            />
-          </div>
-          <div>
-            <label>Repeat Password: </label>{' '}
-            <input
-              type='password'
-              name='password2'
-              onChange={this.onPassword2Change}
-            />
-          </div>
-          <div>
-            <button type='submit'>OK</button>
-          </div>
-          <div>
-            <button onClick={() => this.props.history.push('/')}>
-              Back to Home
-            </button>
-          </div>
-        </form>
-      </div>
-    );
   }
+
+  function onPassword1Change (event) {
+    setPassword1(event.target.value);
+  }
+  function onPassword2Change (event) {
+    setPassword2(event.target.value);
+  }
+
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <div>
+          <label>Password: </label>{' '}
+          <input
+            type='password'
+            name='password1'
+            onChange={onPassword1Change}
+          />
+        </div>
+        <div>
+          <label>Repeat Password: </label>{' '}
+          <input
+            type='password'
+            name='password2'
+            onChange={onPassword2Change}
+          />
+        </div>
+        <div>
+          <button type='submit'>OK</button>
+        </div>
+        <div>
+          <button onClick={() => history.push('/')}>Back to Home</button>
+        </div>
+      </form>
+    </div>
+  );
 }
 
 export default KeystoreGenerator;
