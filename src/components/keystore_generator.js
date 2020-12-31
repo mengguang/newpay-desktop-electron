@@ -3,12 +3,27 @@ import { Link, useHistory } from 'react-router';
 import { Router } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 
+import { Button, TextField } from '@material-ui/core';
+
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
+
 function KeystoreGenerator () {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const history = useHistory();
+  const classes = useStyles();
+  
   useEffect(() => {
-    console.log('useEffect');
+    ipcRenderer.removeAllListeners('keystore:save')
     ipcRenderer.on('keystore:save', (event, result) => {
       console.log(result);
     });
@@ -31,28 +46,33 @@ function KeystoreGenerator () {
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <form className={classes.root} onSubmit={onSubmit}>
         <div>
-          <label>Password: </label>{' '}
-          <input
-            type='password'
-            name='password1'
-            onChange={onPassword1Change}
-          />
+        <TextField
+          name="password1"
+          id="standard-password-input"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          onChange={onPassword1Change}
+        />
         </div>
         <div>
-          <label>Repeat Password: </label>{' '}
-          <input
-            type='password'
-            name='password2'
-            onChange={onPassword2Change}
-          />
+        <TextField
+          name="password2"
+          id="standard-password-input"
+          label="Repeat Password"
+          type="password"
+          autoComplete="current-password"
+          onChange={onPassword2Change}
+        />
         </div>
         <div>
-          <button type='submit'>OK</button>
+          <Button variant="contained" color="primary" type='submit'>OK</Button>
         </div>
         <div>
-          <button onClick={() => history.push('/')}>Back to Home</button>
+          <br />
+          <Button variant="contained" color="secondary" onClick={() => history.push('/')}>Back to Home</Button>
         </div>
       </form>
     </div>
