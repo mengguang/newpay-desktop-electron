@@ -156,3 +156,15 @@ ipcMain.handle('keystore:save', async (_event, password) => {
   }
   
 });
+
+ipcMain.handle('keystore:choose', async (_event, _args) => {
+  const result = await dialog.showOpenDialog({
+    title: 'choose keystore file',
+    defaultPath: app.getPath('desktop')
+  });
+  console.log(result);
+  if(result.canceled === false && result.filePaths.length > 0) {
+    return result.filePaths[0];
+  }
+  return '';
+});

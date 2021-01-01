@@ -6,6 +6,7 @@ import fs from 'fs';
 
 import { Button, TextField, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { ipcRenderer } from 'electron';
 
 const readFile = util.promisify(fs.readFile);
 const rpc_url = 'https://rpc2.newchain.cloud.diynova.com';
@@ -72,57 +73,51 @@ function KeystoreProcessor () {
 
   let handleSubmit = async event => {
     event.preventDefault();
-    await process_keystore(keystore, password);
+    if(keystore.length > 0 && password.length > 0) {
+      await process_keystore(keystore, password);
+    }
   };
 
-  let handleKeystoreChange = event => {
-    setKeystore(event.target.files[0].path);
-  };
   let handlePasswordChange = event => {
     setPassword(event.target.value);
   };
 
+  async function handleChooseKeystore(e) {
+    const keystorePath = await ipcRenderer.invoke('keystore:choose');
+    setKeystore(keystorePath);
+  }
+
   return (
     <div>
       <div>
-        <h1>Keystore Processor</h1>
+        <h2>Keystore Processor</h2>
       </div>
       <div>
-        <form className={classes.root} onSubmit={handleSubmit}>
-          <div>
-            <input
-              style={{ display: 'none' }}
-              id='raised-button-file'
-              type='file'
-              onChange={handleKeystoreChange}
-            />
-            <label htmlFor='raised-button-file'>
-              <Button
-                color='secondary'
-                variant='contained'
-                component='span'
-                type='button'
-              >
-                Choose Keystore file
-              </Button>
-            </label>
-          </div>
-
-          <div>
-            <TextField
-              name='password'
-              id='standard-password-input'
-              label='Password'
-              type='password'
-              autoComplete='current-password'
-              onChange={handlePasswordChange}
-            />
-          </div>
-          <Button variant='contained' color='primary' type='submit'>
-            OK
-          </Button>
-        </form>
+        <Button
+          color='secondary'
+          variant='contained'
+          component='span'
+          type='button'
+          onClick={handleChooseKeystore}
+        >
+          Choose Keystore file
+        </Button>
       </div>
+      <br/>
+      <div>
+        <TextField
+          name='password'
+          id='standard-password-input'
+          label='Password'
+          type='password'
+          autoComplete='current-password'
+          onChange={handlePasswordChange}
+        />
+      </div>
+      <br/>
+      <Button variant='contained' onClick={handleSubmit} color='primary' type='submit'>
+        OK
+      </Button>
     </div>
   );
 }
