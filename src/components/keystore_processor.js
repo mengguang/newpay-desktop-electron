@@ -4,7 +4,7 @@ import util from 'util';
 import { ethers } from 'ethers';
 import fs from 'fs';
 
-import { Button, TextField, Input } from '@material-ui/core';
+import { Button, TextField, Input, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 
@@ -88,7 +88,7 @@ function KeystoreProcessor () {
   }
 
   return (
-    <div>
+    <Container>
       <div>
         <h2>Keystore Processor</h2>
       </div>
@@ -118,7 +118,7 @@ function KeystoreProcessor () {
       <Button variant='contained' onClick={handleSubmit} color='primary' type='submit'>
         OK
       </Button>
-    </div>
+    </Container>
   );
 }
 

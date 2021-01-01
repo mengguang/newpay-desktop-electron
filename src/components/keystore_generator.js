@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router';
 import { Router } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Container } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -40,7 +40,7 @@ function KeystoreGenerator () {
   }
 
   return (
-    <div>
+    <Container>
       <form className={classes.root} onSubmit={onSubmit}>
         <div>
         <TextField
@@ -70,7 +70,7 @@ function KeystoreGenerator () {
           <Button variant="contained" color="secondary" onClick={() => history.push('/')}>Back to Home</Button>
         </div>
       </form>
-    </div>
+    </Container>
   );
 }
 

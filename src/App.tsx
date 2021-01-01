@@ -6,17 +6,17 @@ import {
   useHistory
 } from 'react-router-dom';
 
-import { Button } from '@material-ui/core';
+import { Button, Container } from '@material-ui/core';
 //import icon from '../assets/icon.svg';
 
 import KeystoreProcessor from './components/keystore_processor';
 import KeystoreGenerator from './components/keystore_generator';
 
-const Hello = () => {
+const Main = () => {
   let history = useHistory();
   return (
-    <div>
-      <h1>Hello from NewPay Desktop!</h1>
+    <Container>
+      <h1>NewPay Desktop</h1>
       <KeystoreProcessor />
       <br />
       <Button
@@ -26,7 +26,7 @@ const Hello = () => {
       >
         keystore generator
       </Button>
-    </div>
+    </Container>
   );
 };
 
@@ -35,7 +35,7 @@ export default function App () {
     <Router>
       <Switch>
         <Route path='/keystore_generator' component={KeystoreGenerator} />
-        <Route path='/' component={Hello} />
+        <Route path='/' component={Main} />
       </Switch>
     </Router>
   );
