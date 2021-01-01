@@ -5,6 +5,8 @@ import {
   Route,
   useHistory
 } from 'react-router-dom';
+
+import { Button } from '@material-ui/core';
 //import icon from '../assets/icon.svg';
 
 import KeystoreProcessor from './components/keystore_processor';
@@ -17,9 +19,14 @@ const Hello = () => {
     <div>
       <h1>Hello from NewPay Desktop!</h1>
       <KeystoreProcessor />
-      <button onClick={() => history.push('/keystore_generator')}>
+      <br />
+      <Button
+        variant='contained'
+        color='secondary'
+        onClick={() => history.push('/keystore_generator')}
+      >
         keystore generator
-      </button>
+      </Button>
     </div>
   );
 };

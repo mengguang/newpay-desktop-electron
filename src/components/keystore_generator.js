@@ -21,13 +21,6 @@ function KeystoreGenerator () {
   const [password2, setPassword2] = useState('');
   const history = useHistory();
   const classes = useStyles();
-  
-  // useEffect(() => {
-  //   ipcRenderer.removeAllListeners('keystore:save')
-  //   ipcRenderer.on('keystore:save', (event, result) => {
-  //     console.log(result);
-  //   });
-  // }, []);
 
   function onSubmit (event) {
     event.preventDefault();
