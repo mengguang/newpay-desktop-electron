@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
   useHistory
@@ -10,7 +10,6 @@ import { Button } from '@material-ui/core';
 //import icon from '../assets/icon.svg';
 
 import KeystoreProcessor from './components/keystore_processor';
-
 import KeystoreGenerator from './components/keystore_generator';
 
 const Hello = () => {
