@@ -18,6 +18,7 @@ import MenuBuilder from './menu';
 
 import { ethers } from 'ethers';
 import fs from 'fs';
+import { promisify } from 'util';
 
 export default class AppUpdater {
   constructor () {
@@ -148,13 +149,12 @@ ipcMain.handle('keystore:save', async (_event, password) => {
     defaultPath: `${wallet.address}.json`
   });
   console.log(keystoreFile);
-  if(keystoreFile.canceled === false && keystoreFile.filePath !== undefined) {
-    fs.writeFileSync(keystoreFile.filePath,keystore);
-    return 'SUCCESS'
+  if (keystoreFile.canceled === false && keystoreFile.filePath !== undefined) {
+    fs.writeFileSync(keystoreFile.filePath, keystore);
+    return 'SUCCESS';
   } else {
     return 'FAIL';
   }
-  
 });
 
 ipcMain.handle('keystore:choose', async (_event, _args) => {
@@ -163,8 +163,23 @@ ipcMain.handle('keystore:choose', async (_event, _args) => {
     defaultPath: app.getPath('desktop')
   });
   console.log(result);
-  if(result.canceled === false && result.filePaths.length > 0) {
+  if (result.canceled === false && result.filePaths.length > 0) {
     return result.filePaths[0];
   }
   return '';
+});
+
+ipcMain.handle('keystore:list', async (_event, _args) => {
+  const readdir = promisify(fs.readdir);
+  const basePath = app.getPath('documents');
+  const walletPath = path.join(basePath, 'wallet');
+  const files = await readdir(walletPath);
+  let result: Array<string> = [];
+  files.forEach(file => {
+    if (file.endsWith('.json')) {
+      result.push(path.join(walletPath, file));
+    }
+  });
+  console.log(result);
+  return result;
 });

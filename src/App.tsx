@@ -1,42 +1,37 @@
 import React from 'react';
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-  useHistory
-} from 'react-router-dom';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
-import { Button, Container } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 //import icon from '../assets/icon.svg';
 
 import KeystoreProcessor from './components/keystore_processor';
 import KeystoreGenerator from './components/keystore_generator';
+import KeystoreList from './components/keystore_list';
+
+import CommonButton from './components/common_button';
 
 const Main = () => {
-  let history = useHistory();
   return (
-    <Container>
-      <h1>NewPay Desktop</h1>
-      <KeystoreProcessor />
-      <br />
-      <Button
-        variant='contained'
-        color='secondary'
-        onClick={() => history.push('/keystore_generator')}
-      >
-        keystore generator
-      </Button>
-    </Container>
+    <div>
+      <CommonButton />
+    </div>
   );
 };
 
-export default function App () {
+function App () {
   return (
-    <Router>
-      <Switch>
-        <Route path='/keystore_generator' component={KeystoreGenerator} />
-        <Route path='/' component={Main} />
-      </Switch>
-    </Router>
+    <Container>
+      <h1>NewPay Desktop</h1>
+      <Router>
+        <Switch>
+          <Route path='/keystore_generator' component={KeystoreGenerator} />
+          <Route path='/keystore_list' component={KeystoreList} />
+          <Route path='/keystore_processor' component={KeystoreProcessor} />
+          <Route path='/' component={Main} />
+        </Switch>
+      </Router>
+    </Container>
   );
 }
+
+export default App;

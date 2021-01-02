@@ -6,14 +6,15 @@ import { ipcRenderer } from 'electron';
 import { Button, TextField, Container } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
+import CommonButton from './common_button';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
+      width: '25ch'
+    }
+  }
 }));
 
 function KeystoreGenerator () {
@@ -26,9 +27,9 @@ function KeystoreGenerator () {
     event.preventDefault();
     if (password1 === password2 && password1.length >= 6) {
       console.log(password1);
-      ipcRenderer.invoke('keystore:save', password1).then( message => {
-        console.log(message)
-      })
+      ipcRenderer.invoke('keystore:save', password1).then(message => {
+        console.log(message);
+      });
     }
   }
 
@@ -41,33 +42,42 @@ function KeystoreGenerator () {
 
   return (
     <Container>
+      <CommonButton />
       <form className={classes.root} onSubmit={onSubmit}>
         <div>
-        <TextField
-          name="password1"
-          id="standard-password-input"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          onChange={onPassword1Change}
-        />
+          <TextField
+            name='password1'
+            id='standard-password-input'
+            label='Password'
+            type='password'
+            autoComplete='current-password'
+            onChange={onPassword1Change}
+          />
         </div>
         <div>
-        <TextField
-          name="password2"
-          id="standard-password-input"
-          label="Repeat Password"
-          type="password"
-          autoComplete="current-password"
-          onChange={onPassword2Change}
-        />
+          <TextField
+            name='password2'
+            id='standard-password-input'
+            label='Repeat Password'
+            type='password'
+            autoComplete='current-password'
+            onChange={onPassword2Change}
+          />
         </div>
         <div>
-          <Button variant="contained" color="primary" type='submit'>OK</Button>
+          <Button variant='contained' color='primary' type='submit'>
+            OK
+          </Button>
         </div>
         <div>
           <br />
-          <Button variant="contained" color="secondary" onClick={() => history.push('/')}>Back to Home</Button>
+          <Button
+            variant='contained'
+            color='secondary'
+            onClick={() => history.push('/')}
+          >
+            Back to Home
+          </Button>
         </div>
       </form>
     </Container>

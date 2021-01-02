@@ -8,6 +8,8 @@ import { Button, TextField, Input, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
 
+import CommonButton from './common_button';
+
 const readFile = util.promisify(fs.readFile);
 const rpc_url = 'https://rpc2.newchain.cloud.diynova.com';
 const provider = new ethers.providers.JsonRpcProvider(rpc_url);
@@ -73,7 +75,7 @@ function KeystoreProcessor () {
 
   let handleSubmit = async event => {
     event.preventDefault();
-    if(keystore.length > 0 && password.length > 0) {
+    if (keystore.length > 0 && password.length > 0) {
       await process_keystore(keystore, password);
     }
   };
@@ -82,13 +84,14 @@ function KeystoreProcessor () {
     setPassword(event.target.value);
   };
 
-  async function handleChooseKeystore(e) {
+  async function handleChooseKeystore (e) {
     const keystorePath = await ipcRenderer.invoke('keystore:choose');
     setKeystore(keystorePath);
   }
 
   return (
     <Container>
+      <CommonButton />
       <div>
         <h2>Keystore Processor</h2>
       </div>
@@ -103,7 +106,7 @@ function KeystoreProcessor () {
           Choose Keystore file
         </Button>
       </div>
-      <br/>
+      <br />
       <div>
         <TextField
           name='password'
@@ -114,8 +117,13 @@ function KeystoreProcessor () {
           onChange={handlePasswordChange}
         />
       </div>
-      <br/>
-      <Button variant='contained' onClick={handleSubmit} color='primary' type='submit'>
+      <br />
+      <Button
+        variant='contained'
+        onClick={handleSubmit}
+        color='primary'
+        type='submit'
+      >
         OK
       </Button>
     </Container>
