@@ -18,11 +18,20 @@ import path from 'path';
 import { ipcRenderer } from 'electron';
 import { promisify } from 'util';
 
+import { ethers } from 'ethers';
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650
   }
 });
+
+function pretty_balance (balance) {
+  return ethers.utils.formatEther(balance);
+}
+
+const rpc_url = 'https://rpc2.newchain.cloud.diynova.com';
+const provider = new ethers.providers.JsonRpcProvider(rpc_url);
 
 async function keystore_list () {
   const keystoreFiles = await ipcRenderer.invoke('keystore:list');
@@ -38,12 +47,28 @@ async function keystore_list () {
   return results;
 }
 
+async function keystore_list_results_fill_balance (results) {
+  const results_with_balance = await Promise.all(
+    results.map(async row => {
+      const { address } = row;
+      const balance = await provider.getBalance(address);
+      const balance_of_new = pretty_balance(balance)
+      console.log(`Balance of NEW: ${balance_of_new}`);
+      row.balance = balance_of_new;
+      return row;
+    })
+  );
+  return results_with_balance;
+}
+
 function KeystoreList (props) {
   const classes = useStyles();
   const [rows, setRows] = useState([]);
 
   const updateRows = async () => {
-    const data = await keystore_list();
+    let data = await keystore_list();
+    data = await keystore_list_results_fill_balance(data);
+    console.log(data);
     setRows(data);
     console.log(data);
   };
@@ -60,7 +85,7 @@ function KeystoreList (props) {
           <TableHead>
             <TableRow>
               <TableCell>Address</TableCell>
-              <TableCell align='right'>Balance</TableCell>
+              <TableCell align='right'>Balance(NEW)</TableCell>
               <TableCell align='right'>Type</TableCell>
               <TableCell align='right'>AliasName</TableCell>
               <TableCell align='right'>Note</TableCell>
