@@ -69,16 +69,7 @@ function KeystoreGenerator () {
             OK
           </Button>
         </div>
-        <div>
-          <br />
-          <Button
-            variant='contained'
-            color='secondary'
-            onClick={() => history.push('/')}
-          >
-            Back to Home
-          </Button>
-        </div>
+
       </form>
     </Container>
   );

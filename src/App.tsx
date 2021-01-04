@@ -7,6 +7,7 @@ import { Container } from '@material-ui/core';
 import KeystoreProcessor from './components/keystore_processor';
 import KeystoreGenerator from './components/keystore_generator';
 import KeystoreList from './components/keystore_list';
+import Setting from './components/setting';
 
 import CommonButton from './components/common_button';
 
@@ -27,6 +28,7 @@ function App () {
           <Route path='/keystore_generator' component={KeystoreGenerator} />
           <Route path='/keystore_list' component={KeystoreList} />
           <Route path='/keystore_processor' component={KeystoreProcessor} />
+          <Route path='/setting' component={Setting} />
           <Route path='/' component={Main} />
         </Switch>
       </Router>

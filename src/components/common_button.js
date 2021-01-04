@@ -30,6 +30,13 @@ function CommonButton (props) {
         >
           keystore list
         </Button>
+        <Button
+          variant='contained'
+          color='secondary'
+          onClick={() => history.push('/setting')}
+        >
+          setting
+        </Button>
       </ButtonGroup>
     </div>
   );
