@@ -28,6 +28,8 @@ import { promisify } from 'util';
 
 import { ethers } from 'ethers';
 
+import ModalTransfer from './modal_transfer';
+
 const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 650
@@ -59,7 +61,7 @@ async function keystore_list () {
       const keystoreJson = await fs.readFile(file);
       const keystoreData = JSON.parse(keystoreJson);
       const address = '0x' + keystoreData.address;
-      results.push({ address, balance: 0, type: 'real', alias: '', note: '' });
+      results.push({file, address, balance: 0, type: 'real', alias: '', note: '' });
     })
   );
   return results;
@@ -80,7 +82,9 @@ async function keystore_list_results_fill_balance (results) {
 }
 
 function KeystoreRow (props) {
-  const [action, setAction] = useState('');
+  const [action, setAction] = useState('transfer');
+  const [open, setOpen] = React.useState(false);
+
   const classes = useStyles();
   let row = props.row;
 
@@ -89,10 +93,18 @@ function KeystoreRow (props) {
     setAction(e.target.value);
   }
 
+  
+  const handleModalClose = () => {
+    setOpen(false);
+  };
+
   function handleActionButtonClick (e) {
     console.log(`button clicked, action: ${action}, address: ${row.address}`);
     if (action === 'copy-address') {
       clipboard.writeText(row.address);
+    }
+    if (action === 'transfer') {
+      setOpen(true);
     }
   }
 
@@ -126,6 +138,7 @@ function KeystoreRow (props) {
         >
           OK
         </Button>
+        <ModalTransfer open={open} file={row.file} fromAddress={row.address} handleModalClose={handleModalClose} />
       </TableCell>
     </TableRow>
   );
