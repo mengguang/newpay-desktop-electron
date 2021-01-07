@@ -29,6 +29,11 @@ import { promisify } from 'util';
 import { ethers } from 'ethers';
 
 import ModalTransfer from './modal_transfer';
+import ModalNoteEditor from './modal_note_editor';
+
+import Store from 'electron-store';
+
+const store = new Store();
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -61,7 +66,14 @@ async function keystore_list () {
       const keystoreJson = await fs.readFile(file);
       const keystoreData = JSON.parse(keystoreJson);
       const address = '0x' + keystoreData.address;
-      results.push({file, address, balance: 0, type: 'real', alias: '', note: '' });
+      results.push({
+        file,
+        address,
+        balance: 0,
+        type: 'real',
+        alias: '',
+        note: ''
+      });
     })
   );
   return results;
@@ -81,9 +93,47 @@ async function keystore_list_results_fill_balance (results) {
   return results_with_balance;
 }
 
+function keystore_list_results_fill_note (results) {
+  const notes = store.get('notes');
+  console.log(notes);
+  const results_with_note = results.map(row => {
+    const { address } = row;
+    row.note = notes[address];
+    return row;
+  });
+  return results_with_note;
+}
+
+function descendingComparator (a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator (order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function stableSort (array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map(el => el[0]);
+}
+
 function KeystoreRow (props) {
   const [action, setAction] = useState('transfer');
-  const [open, setOpen] = React.useState(false);
+  const [modalTransferOpen, setTransferOpen] = useState(false);
+  const [noteEditorOpen, setNoteEditorOpen] = useState(false);
 
   const classes = useStyles();
   let row = props.row;
@@ -93,9 +143,12 @@ function KeystoreRow (props) {
     setAction(e.target.value);
   }
 
-  
-  const handleModalClose = () => {
-    setOpen(false);
+  const handleModalTransferClose = () => {
+    setTransferOpen(false);
+  };
+
+  const handleModalNoteEditorClose = () => {
+    setNoteEditorOpen(false);
   };
 
   function handleActionButtonClick (e) {
@@ -104,7 +157,10 @@ function KeystoreRow (props) {
       clipboard.writeText(row.address);
     }
     if (action === 'transfer') {
-      setOpen(true);
+      setTransferOpen(true);
+    }
+    if (action === 'edit-note') {
+      setNoteEditorOpen(true);
     }
   }
 
@@ -138,7 +194,17 @@ function KeystoreRow (props) {
         >
           OK
         </Button>
-        <ModalTransfer open={open} file={row.file} fromAddress={row.address} handleModalClose={handleModalClose} />
+        <ModalTransfer
+          open={modalTransferOpen}
+          file={row.file}
+          fromAddress={row.address}
+          handleModalClose={handleModalTransferClose}
+        />
+        <ModalNoteEditor
+          open={noteEditorOpen}
+          address={row.address}
+          handleModalClose={handleModalNoteEditorClose}
+        />
       </TableCell>
     </TableRow>
   );
@@ -151,6 +217,8 @@ function KeystoreList (props) {
   const updateRows = async () => {
     let data = await keystore_list();
     data = await keystore_list_results_fill_balance(data);
+    data = keystore_list_results_fill_note(data);
+    data = stableSort(data, getComparator('asc', 'address'));
     console.log(data);
     setRows(data);
     console.log(data);
