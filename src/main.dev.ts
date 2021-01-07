@@ -20,6 +20,8 @@ import { ethers } from 'ethers';
 import fs from 'fs';
 import { promisify } from 'util';
 
+import windowStateKeeper from 'electron-window-state';
+
 export default class AppUpdater {
   constructor () {
     log.transports.file.level = 'info';
@@ -71,16 +73,25 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  // Load the previous state with fallback to defaults
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 800
+  });
+
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1600,
-    height: 800,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true
     }
   });
+  mainWindowState.manage(mainWindow);
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
