@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Store from 'electron-store';
 
-import { Button, TextField, Container } from '@material-ui/core';
-import { Link, useHistory } from 'react-router';
+import { Button, TextField, Container, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CommonButton from './common_button';
 
@@ -19,7 +18,6 @@ const useStyles = makeStyles(theme => ({
 export default function Setting () {
   const defaultRpcurl = 'https://rpc2.newchain.cloud.diynova.com';
   const [rpcurl, setRpcurl] = useState(defaultRpcurl);
-  let history = useHistory();
   const store = new Store();
 
   useEffect(() => {
@@ -52,13 +50,28 @@ export default function Setting () {
         />
       </div>
       <div>
-        <br />
-        <Button variant='contained' color='secondary' onClick={handleSave}>
-          Save
-        </Button>
-        <Button variant='contained' color='secondary' onClick={() => {}}>
-          Cancel
-        </Button>
+        <Box display='flex' flexDirection='row'>
+          <Box m={1}>
+            <Button
+              size='small'
+              variant='contained'
+              color='secondary'
+              onClick={handleSave}
+            >
+              Save
+            </Button>
+          </Box>
+          <Box m={1}>
+            <Button
+              variant='contained'
+              size='small'
+              color='secondary'
+              onClick={() => {}}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
       </div>
     </Container>
   );
