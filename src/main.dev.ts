@@ -21,6 +21,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 
 import windowStateKeeper from 'electron-window-state';
+import Store from 'electron-store';
 
 export default class AppUpdater {
   constructor () {
@@ -85,6 +86,8 @@ const createWindow = async () => {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
+    minHeight: 800,
+    minWidth: 1200,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -156,13 +159,29 @@ ipcMain.handle('keystore:save', async (_event, password) => {
   const wallet = ethers.Wallet.createRandom();
   const keystore = await wallet.encrypt(password);
 
-  const keystoreFile = await dialog.showSaveDialog({
-    title: 'save keystore file as...',
-    defaultPath: `${wallet.address}.json`
-  });
-  console.log(keystoreFile);
-  if (keystoreFile.canceled === false && keystoreFile.filePath !== undefined) {
-    fs.writeFileSync(keystoreFile.filePath, keystore);
+  const store = new Store();
+  let keystoreFile: string = '';
+
+  if (store.has('walletPath')) {
+    const walletPath = <string>store.get('walletPath');
+    keystoreFile = path.join(walletPath, `${wallet.address}.json`);
+  } else {
+    const result = await dialog.showSaveDialog({
+      title: 'save keystore file as...',
+      defaultPath: `${wallet.address}.json`
+    });
+    console.log(result);
+    if (result.canceled === false && result.filePath !== undefined) {
+      keystoreFile = result.filePath;
+    }
+  }
+
+  if (keystoreFile !== '') {
+    fs.writeFileSync(keystoreFile, keystore);
+    dialog.showMessageBox(mainWindow!,{
+      message: "the keystore has beed created",
+      detail: `address is ${wallet.address}`,
+    });
     return 'SUCCESS';
   } else {
     return 'FAIL';
@@ -180,7 +199,6 @@ ipcMain.handle('keystore:choose', async (_event, _args) => {
   }
   return '';
 });
-
 
 ipcMain.handle('keystore:choose-wallet-path', async (_event, _args) => {
   const result = await dialog.showOpenDialog({

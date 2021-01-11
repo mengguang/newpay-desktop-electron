@@ -96,6 +96,9 @@ async function keystore_list_results_fill_balance (results) {
 function keystore_list_results_fill_note (results) {
   const notes = store.get('notes');
   console.log(notes);
+  if (notes === undefined) {
+    return results;
+  }
   const results_with_note = results.map(row => {
     const { address } = row;
     row.note = notes[address];

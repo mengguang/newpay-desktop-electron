@@ -112,16 +112,6 @@ export default function Setting () {
               Save
             </Button>
           </Box>
-          <Box m={1}>
-            <Button
-              variant='contained'
-              size='small'
-              color='secondary'
-              onClick={() => {}}
-            >
-              Cancel
-            </Button>
-          </Box>
         </Box>
       </div>
     </Container>

@@ -3,25 +3,15 @@ import { Link, useHistory } from 'react-router';
 import { Router } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 
-import { Button, TextField, Container } from '@material-ui/core';
+import { Button, TextField, Container, Box } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
 import CommonButton from './common_button';
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '25ch'
-    }
-  }
-}));
 
 function KeystoreGenerator () {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const history = useHistory();
-  const classes = useStyles();
 
   function onSubmit (event) {
     event.preventDefault();
@@ -43,9 +33,10 @@ function KeystoreGenerator () {
   return (
     <Container>
       <CommonButton />
-      <form className={classes.root} onSubmit={onSubmit}>
-        <div>
+      <form onSubmit={onSubmit}>
+        <Box m={1} width='25ch'>
           <TextField
+            fullWidth
             name='password1'
             id='standard-password-input'
             label='Password'
@@ -53,9 +44,10 @@ function KeystoreGenerator () {
             autoComplete='current-password'
             onChange={onPassword1Change}
           />
-        </div>
-        <div>
+        </Box>
+        <Box m={1} width='25ch'>
           <TextField
+            fullWidth
             name='password2'
             id='standard-password-input'
             label='Repeat Password'
@@ -63,13 +55,12 @@ function KeystoreGenerator () {
             autoComplete='current-password'
             onChange={onPassword2Change}
           />
-        </div>
-        <div>
+        </Box>
+        <Box m={1}>
           <Button variant='contained' color='primary' type='submit'>
             OK
           </Button>
-        </div>
-
+        </Box>
       </form>
     </Container>
   );
