@@ -4,14 +4,23 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Box, Button, ButtonGroup } from '@material-ui/core';
 
+import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles(theme => ({
+  button: {
+    marginRight: theme.spacing(1),
+    backgroundColor: '#00adb5'
+  }
+}));
+
 function CommonButton (props) {
   let history = useHistory();
+  const classes = useStyles();
   return (
     <Box display='flex' flexDirection='row'>
       <Box m={1}>
         <Button
           variant='contained'
-          color='secondary'
+          className={classes.button}
           onClick={() => history.push('/keystore_generator')}
         >
           keystore generator
@@ -20,7 +29,7 @@ function CommonButton (props) {
       <Box m={1}>
         <Button
           variant='contained'
-          color='secondary'
+          className={classes.button}
           onClick={() => history.push('/keystore_list')}
         >
           keystore list
@@ -29,7 +38,7 @@ function CommonButton (props) {
       <Box m={1}>
         <Button
           variant='contained'
-          color='secondary'
+          className={classes.button}
           onClick={() => history.push('/setting')}
         >
           setting
