@@ -168,7 +168,7 @@ function KeystoreRow (props) {
   }
 
   return (
-    <TableRow key={row.address}>
+    <TableRow>
       <TableCell component='th' scope='row'>
         {row.address}
       </TableCell>
@@ -246,7 +246,7 @@ function KeystoreList (props) {
           </TableHead>
           <TableBody>
             {rows.map(row => (
-              <KeystoreRow row={row} />
+              <KeystoreRow row={row} key={row.address} />
             ))}
           </TableBody>
         </Table>
