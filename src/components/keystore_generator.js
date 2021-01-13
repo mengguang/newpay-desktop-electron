@@ -56,7 +56,7 @@ function KeystoreGenerator () {
             onChange={onPassword2Change}
           />
         </Box>
-        <Box m={1}>
+        <Box mx={1} my={2}>
           <Button variant='contained' color='primary' type='submit'>
             OK
           </Button>

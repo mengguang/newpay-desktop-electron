@@ -179,8 +179,8 @@ ipcMain.handle('keystore:save', async (_event, password) => {
   if (keystoreFile !== '') {
     fs.writeFileSync(keystoreFile, keystore);
     dialog.showMessageBox(mainWindow!,{
-      message: "the keystore has beed created",
-      detail: `address is ${wallet.address}`,
+      message: "The keystore has beed created",
+      detail: `Address is ${wallet.address}`,
     });
     return 'SUCCESS';
   } else {

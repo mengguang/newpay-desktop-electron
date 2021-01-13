@@ -29,6 +29,9 @@ const useStyles = makeStyles(theme => ({
   inputControl: {
     margin: theme.spacing(1),
     width: '42ch'
+  },
+  button: {
+    margin: theme.spacing(1)
   }
 }));
 
@@ -115,6 +118,7 @@ function ModalTransfer (props) {
       </div>
       <br />
       <Button
+        className={classes.button}
         variant='contained'
         onClick={handleSubmit}
         color='primary'
@@ -122,7 +126,12 @@ function ModalTransfer (props) {
       >
         OK
       </Button>
-      <Button variant='contained' color='secondary' onClick={handleClose}>
+      <Button
+        className={classes.button}
+        variant='contained'
+        color='secondary'
+        onClick={handleClose}
+      >
         Close
       </Button>
     </div>
