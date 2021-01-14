@@ -16,7 +16,7 @@ function CommonButton (props) {
   let history = useHistory();
   const classes = useStyles();
   return (
-    <Box display='flex' flexDirection='row'>
+    <Box display='flex' flexDirection='row' position="fixed" top={0} bgcolor="#eeeeee" width="100%">
       <Box m={1}>
         <Button
           variant='contained'

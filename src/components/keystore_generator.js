@@ -33,35 +33,37 @@ function KeystoreGenerator () {
   return (
     <Container>
       <CommonButton />
-      <form onSubmit={onSubmit}>
-        <Box m={1} width='25ch'>
-          <TextField
-            fullWidth
-            name='password1'
-            id='standard-password-input'
-            label='Password'
-            type='password'
-            autoComplete='current-password'
-            onChange={onPassword1Change}
-          />
-        </Box>
-        <Box m={1} width='25ch'>
-          <TextField
-            fullWidth
-            name='password2'
-            id='standard-password-input'
-            label='Repeat Password'
-            type='password'
-            autoComplete='current-password'
-            onChange={onPassword2Change}
-          />
-        </Box>
-        <Box mx={1} my={2}>
-          <Button variant='contained' color='primary' type='submit'>
-            OK
-          </Button>
-        </Box>
-      </form>
+      <Box mt={10}>
+        <form onSubmit={onSubmit}>
+          <Box m={1} width='25ch'>
+            <TextField
+              fullWidth
+              name='password1'
+              id='standard-password-input'
+              label='Password'
+              type='password'
+              autoComplete='current-password'
+              onChange={onPassword1Change}
+            />
+          </Box>
+          <Box m={1} width='25ch'>
+            <TextField
+              fullWidth
+              name='password2'
+              id='standard-password-input'
+              label='Repeat Password'
+              type='password'
+              autoComplete='current-password'
+              onChange={onPassword2Change}
+            />
+          </Box>
+          <Box mx={1} my={2}>
+            <Button variant='contained' color='primary' type='submit'>
+              OK
+            </Button>
+          </Box>
+        </form>
+      </Box>
     </Container>
   );
 }

@@ -9,7 +9,8 @@ import {
   Select,
   MenuItem,
   NativeSelect,
-  Button
+  Button,
+  Box
 } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -32,6 +33,8 @@ import ModalTransfer from './modal_transfer';
 import ModalNoteEditor from './modal_note_editor';
 
 import Store from 'electron-store';
+import { Link } from 'react-router-dom';
+import { NoEncryption } from '@material-ui/icons';
 
 const store = new Store();
 
@@ -48,6 +51,15 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(1)
+  },
+  link: {
+    marginLeft: theme.spacing(1),
+    textDecoration: 'none',
+  },
+  address: {
+    fontFamily: "Courier New,Courier,Lucida Sans Typewriter,Lucida Typewriter,monospace;",
+    fontWeight: "bold",
+    fontSize: "1rem"
   }
 }));
 
@@ -166,11 +178,16 @@ function KeystoreRow (props) {
       setNoteEditorOpen(true);
     }
   }
+  function copyAddress(e) {
+    e.preventDefault();
+    clipboard.writeText(row.address);
+  }
 
   return (
     <TableRow>
-      <TableCell component='th' scope='row'>
+      <TableCell component='th' scope='row' className={classes.address}>
         {row.address}
+        <Link className={classes.link} href='#' onClick={copyAddress}>copy</Link>
       </TableCell>
       <TableCell align='right'>{row.balance}</TableCell>
       <TableCell align='right'>{row.note}</TableCell>
@@ -234,6 +251,7 @@ function KeystoreList (props) {
   return (
     <Container>
       <CommonButton />
+      <Box mt={10}>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label='simple table'>
           <TableHead>
@@ -251,6 +269,7 @@ function KeystoreList (props) {
           </TableBody>
         </Table>
       </TableContainer>
+      </Box>
     </Container>
   );
 }

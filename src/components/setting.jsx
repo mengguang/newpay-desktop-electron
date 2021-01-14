@@ -64,7 +64,7 @@ export default function Setting () {
   return (
     <Container>
       <CommonButton />
-      <Box display='flex' flexDirection='row' m={1} width='50ch'>
+      <Box display='flex' flexDirection='row' m={1} width='50ch' mt={10}>
         <TextField
           fullWidth
           name='rpcurl'
