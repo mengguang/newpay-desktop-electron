@@ -92,8 +92,9 @@ export default function Setting () {
         <Box m={1}>
           <Button
             size='medium'
+            className="button-normal"
             variant='contained'
-            color='primary'
+            color='blue'
             onClick={handleChooseWalletPath}
           >
             Choose
